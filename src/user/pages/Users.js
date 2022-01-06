@@ -3,7 +3,7 @@ import UsersList from '../components/UsersList'
 
 const Users = () => {
 
-    const users = () => [
+    const users = [
         {
             id: "u1",
             name: "Houki",
