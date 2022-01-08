@@ -32,7 +32,7 @@ const PlaceList = (props) => {
                 description={place.description}
                 address={place.address}
                 creatorId={place.creator}
-                coordinates={place.coordinates}
+                coordinates={place.location}
             />
         ))}
     </ul>
