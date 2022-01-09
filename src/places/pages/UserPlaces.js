@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import PlaceList from '../components/PlaceList';
 
 
-const places = [
+export const places = [
     {
         id: "p1",
         title: "Mount Kilimandjaro",
