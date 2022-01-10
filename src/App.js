@@ -3,8 +3,8 @@ import NewPlace from "./places/pages/NewPlace";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import UserPlaces from "./places/pages/UserPlaces";
 import MainNavigation from "./shared/components/navigation/MainNavigation";
-import Login from "./user/pages/Login";
-import Register from "./user/pages/Register";
+import Auth from "./user/pages/Auth";
+
 import Users from "./user/pages/Users";
 
 function App() {
@@ -29,16 +29,9 @@ function App() {
                         />
                         
                         <Route
-                            path="/login"
-                            element={<Login />}
+                            path="/auth"
+                            element={<Auth />}
                         />
-                        
-                        <Route
-                            path="/register"
-                            element={<Register />}
-                        />
-                        
-
                         
                     </Routes>
                 </main>
