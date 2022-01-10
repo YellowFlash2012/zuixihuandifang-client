@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Card from '../../shared/components/UI/Card';
 import PlaceItem from './PlaceItem';
 
+import Button from '../../shared/components/FormElements/Button';
+
 import "./PlaceList.css"
 
 const PlaceList = (props) => {
@@ -14,9 +16,9 @@ const PlaceList = (props) => {
                 <Card>
                     <h2>No place found! Do you want to create one?</h2>
 
-                    <button>
+                    <Button>
                         <Link to="places/new"> Share place</Link>
-                    </button>
+                    </Button>
                 </Card>
             </div>
         );

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import { useParams } from 'react-router-dom'
 
@@ -12,30 +12,63 @@ import { places } from "./UserPlaces"
 
 import './NewPlace.css'
 import { useForm } from '../../shared/hooks/form-hook';
+import Card from '../../shared/components/UI/Card';
 
 const UpdatePlace = () => {
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const placeId = useParams().placeId;
 
-    const placeToUpdate = places.find(p => p.id === placeId);
-
-    const [formState, inputHandler] = useForm({
+    const [formState, inputHandler, setFormData] = useForm({
         title: {
-            value: placeToUpdate.title,
-            isValid: true
+            value: '',
+            isValid: false
         },
         description: {
-            value: placeToUpdate.description,
-            isValid: true
+            value: '',
+            isValid: false
         }
-    }, true);
+    }, false);
+
+    const placeToUpdate = places.find((p) => p.id === placeId);
+
+    useEffect(() => {
+        if (placeToUpdate) {
+            
+            setFormData(
+                {
+                    title: {
+                        value: placeToUpdate.title,
+                        isValid: true,
+                    },
+                    description: {
+                        value: placeToUpdate.description,
+                        isValid: false,
+                    },
+                },
+                true
+            )
+        };
+        setIsLoading(false);
+    }, [setFormData, placeToUpdate])
 
     if (!placeToUpdate) {
         return (
             <div className="center">
-                <h2>Such place doesn't exist. Please try again!</h2>
+                <Card>
+                    <h2>Such place doesn't exist. Please try again!</h2>
+                </Card>
             </div>
-        )
+        );
+    }
+
+    if (isLoading) {
+        return (
+            <div className="center">
+                <h2>Loading...</h2>
+            </div>
+        );
     }
 
     const placeUpdateSubmit = (e) => {

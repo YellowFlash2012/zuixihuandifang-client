@@ -12,9 +12,23 @@ const PlaceItem = (props) => {
 
     const [showMap, setShowMap] = useState(false);
 
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
     const openMap = () => setShowMap(true);
 
     const closeMap = () => setShowMap(false);
+
+    const showDeleteWarning = () => {
+        setShowConfirmModal(true);
+    }
+
+    const cancelDeleteHandler = () => {
+        setShowConfirmModal(false);
+    }
+
+    const confirmDelete = () => {
+        console.log('DELETING...');
+    }
 
     return (
         <>
@@ -30,6 +44,31 @@ const PlaceItem = (props) => {
                 <div className="map-container">
                     <Map center={props.coordinates} zoom={18} />
                 </div>
+            </Modal>
+
+            <Modal
+                show={showConfirmModal}
+                onCancel={cancelDeleteHandler}
+                header="Slow down please!" footerClass="place-item__modal-actions"
+                footer={
+                    <>
+                        <Button
+                            inverse
+                            onClick={cancelDeleteHandler}
+                        >
+                            CANCEL
+                        </Button>
+
+                        <Button
+                            danger
+                            onClick={confirmDelete}
+                        >
+                            DELETE
+                        </Button>
+                    </>
+                }
+            >
+                <p>You sure about that? There is no going back!</p>
             </Modal>
 
             <li className="place-item">
@@ -56,7 +95,12 @@ const PlaceItem = (props) => {
 
                         <Button to={`/places/${props.id}`}>EDIT</Button>
 
-                        <Button danger>DELETE</Button>
+                        <Button
+                            danger
+                            onClick={showDeleteWarning}
+                        >
+                            DELETE
+                        </Button>
                     </div>
                 </Card>
             </li>
