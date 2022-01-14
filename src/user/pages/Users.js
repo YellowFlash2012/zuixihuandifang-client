@@ -1,18 +1,60 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import UsersList from '../components/UsersList'
+
+import ErrorModal from "../../shared/components/UI/ErrorModal"
+import LoadingSpinner from "../../shared/components/UI/LoadingSpinner"
 
 const Users = () => {
 
-    const users = [
-        {
-            id: "u1",
-            name: "Houki",
-            image: "https://images.unsplash.com/photo-1591581741980-f68fbd92bcfa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            place: 3,
-        },
-    ];
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [error, setError] = useState();
+
+    const [loadedUsers, setLoadedUsers] = useState();
+
+    // bad idea to put async directly in useEffect callback, hence the necessity for sendRequest()
+    useEffect(() => {
+        const sendRequest = async () => {
+            setIsLoading(true);
+
+            try {
+                const res = await fetch("http://localhost:5000/api/users");
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message);
+                }
+
+                setLoadedUsers(data.users);
+                
+
+            } catch (err) {
+                
+                setError(err.message);
+            }
+            setIsLoading(false);
+        };
+        sendRequest();
+    }, [])
+
+    const errorHandler = () => {
+        setError(null);
+    }
     
-    return <UsersList items={users} />
+    return (
+        <>
+            <ErrorModal error={error} onClear={errorHandler} />
+
+            {isLoading && (
+                <div className='center'>
+                <LoadingSpinner />
+            </div>
+            )}
+
+            {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
+        </>
+    );
 }
 
 export default Users
