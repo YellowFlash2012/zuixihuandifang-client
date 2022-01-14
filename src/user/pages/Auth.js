@@ -20,6 +20,10 @@ const Auth = () => {
 
     const [isLoginMode, setIsLoginMode] = useState(true);
 
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [error, setError] = useState();
+
     const [formState, inputHandler, setFormData] = useForm(
         {
             email: {
@@ -53,8 +57,39 @@ const Auth = () => {
         setIsLoginMode(prevState => !prevState);
     }
 
-    const authHandler = (e) => {
+    const authHandler = async (e) => {
         e.preventDefault();
+
+        if (isLoginMode) {
+            
+        } else {
+            try {
+                const res = await fetch(
+                    "http://localhost:5000/api/users/signup",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            name: formState.inputs.name.value,
+                            email: formState.inputs.email.value,
+                            password: formState.inputs.password.value,
+                        }),
+                    }
+                );
+
+                const data = await res.json();
+
+                console.log(data);
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        
+
         console.log(formState.inputs);
         auth.login();
         navigate("/")
@@ -88,6 +123,7 @@ const Auth = () => {
                     id="password"
                     element="input"
                     label="Password"
+                    type="password"
                     validators={[VALIDATOR_MINLENGTH(13)]}
                     errorText="Password must be at least 13 characters"
                     onInput={inputHandler}
