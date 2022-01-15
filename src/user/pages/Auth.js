@@ -15,6 +15,7 @@ import ErrorModal from "../../shared/components/UI/ErrorModal"
 import {AuthContext} from "../../shared/context/auth-context"
 
 import "./Auth.css"
+import { useHttpClient } from '../../shared/hooks/http-hook'
 
 const Auth = () => {
     const navigate = useNavigate();
@@ -23,9 +24,7 @@ const Auth = () => {
 
     const [isLoginMode, setIsLoginMode] = useState(true);
 
-    const [isLoading, setIsLoading] = useState(false);
-
-    const [error, setError] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -63,71 +62,50 @@ const Auth = () => {
     const authHandler = async (e) => {
         e.preventDefault();
 
-        setIsLoading(true);
-
         if (isLoginMode) {
             try {
-                const res = await fetch(
+                await sendRequest(
                     "http://localhost:5000/api/users/login",
+                    "POST",
+                    JSON.stringify({
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value,
+                    }),
                     {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            
-                            email: formState.inputs.email.value,
-                            password: formState.inputs.password.value,
-                        }),
-                    }
+                        "Content-Type": "application/json",
+                    },
+                    
                 );
 
-                const data = await res.json();
-
-                if (!res.ok) {
-                    throw new Error(data.message);
-                }
-
-                console.log(data);
-                setIsLoading(false);
                 auth.login();
-            } catch (err) {
-                console.log(err);
-                setError(
-                    err.message || "Something went wrong, please try again!"
-                );
+            } catch (error) {
+                console.log(error);
             }
+                
         } else {
             
             try {
-                const res = await fetch(
+                const res = await sendRequest(
                     "http://localhost:5000/api/users/signup",
-                    {
-                        method: "POST",
-                        headers: {
+                    
+                        "POST",
+                        {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({
+                        JSON.stringify({
                             name: formState.inputs.name.value,
                             email: formState.inputs.email.value,
                             password: formState.inputs.password.value,
                         }),
-                    }
+                    
                 );
 
-                const data = await res.json();
-
-                if (!res.ok) {
-                    throw new Error(data.message)
-                }
-
-                console.log(data);
-                setIsLoading(false);
+                console.log(res);
                 auth.login();
 
             } catch (err) {
                 console.log(err);
-                setError(err.message || "Something went wrong, please try again!");
+                
             }
         }
 
@@ -136,13 +114,10 @@ const Auth = () => {
         navigate("/")
     };
 
-    const errorHandler = () => {
-        setError(null);
-    }
 
     return (
         <>
-            <ErrorModal error={error} onClear={errorHandler} />
+            <ErrorModal error={error} onClear={clearError} />
             <Card className="authentication">
                 {isLoading && <LoadingSpinner asOverlay />}
 
