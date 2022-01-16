@@ -13,9 +13,12 @@ function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const [userId, setUserId] = useState(false);
+
     const login = useCallback(
-        () => {
+        (uid) => {
             setIsLoggedIn(true);
+            setUserId(uid);
         },
         [],
     );
@@ -23,6 +26,7 @@ function App() {
     const logout = useCallback(
         () => {
             setIsLoggedIn(false);
+            setUserId(null);
         },
         [],
     );
@@ -30,7 +34,7 @@ function App() {
     return (
         <div className="App">
             <AuthContext.Provider
-                value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+                value={{ isLoggedIn: isLoggedIn, userId:userId, login: login, logout: logout }}
             >
                 <BrowserRouter>
                     <MainNavigation />

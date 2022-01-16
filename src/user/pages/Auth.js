@@ -64,7 +64,7 @@ const Auth = () => {
 
         if (isLoginMode) {
             try {
-                await sendRequest(
+                const data = await sendRequest(
                     "http://localhost:5000/api/users/login",
                     "POST",
                     JSON.stringify({
@@ -77,7 +77,7 @@ const Auth = () => {
                     
                 );
 
-                auth.login();
+                auth.login(data.user.id);
             } catch (error) {
                 console.log(error);
             }
@@ -85,23 +85,23 @@ const Auth = () => {
         } else {
             
             try {
-                const res = await sendRequest(
+                const data = await sendRequest(
                     "http://localhost:5000/api/users/signup",
-                    
-                        "POST",
-                        {
-                            "Content-Type": "application/json",
-                        },
-                        JSON.stringify({
-                            name: formState.inputs.name.value,
-                            email: formState.inputs.email.value,
-                            password: formState.inputs.password.value,
-                        }),
-                    
+
+                    "POST",
+
+                    JSON.stringify({
+                        name: formState.inputs.name.value,
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value,
+                    }),
+                    {
+                        "Content-Type": "application/json",
+                    }
                 );
 
-                console.log(res);
-                auth.login();
+                console.log(data);
+                auth.login(data.user.id);
 
             } catch (err) {
                 console.log(err);
