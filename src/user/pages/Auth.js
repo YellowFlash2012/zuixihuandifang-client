@@ -16,6 +16,7 @@ import {AuthContext} from "../../shared/context/auth-context"
 
 import "./Auth.css"
 import { useHttpClient } from '../../shared/hooks/http-hook'
+import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 
 const Auth = () => {
     const navigate = useNavigate();
@@ -133,6 +134,9 @@ const Auth = () => {
                             onInput={inputHandler}
                         />
                     )}
+
+                    {!isLoginMode && <ImageUpload center id="image" />}
+
                     <Input
                         id="email"
                         element="input"
