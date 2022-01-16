@@ -85,7 +85,7 @@ const PlaceItem = (props) => {
             <li className="place-item">
 
                 {isLoading && <LoadingSpinner asOverlay />}
-                
+
                 <Card className="place-item__content">
                     <div className="place-item__image">
                         <img src={props.image} alt={props.title} />
@@ -104,7 +104,7 @@ const PlaceItem = (props) => {
                             VIEW ON MAP
                         </Button>
 
-                        {auth.isLoggedIn && (
+                        {auth.userId === props.creatorId && (
                             <>
                                 <Button to={`/places/${props.id}`}>EDIT</Button>
                                 
