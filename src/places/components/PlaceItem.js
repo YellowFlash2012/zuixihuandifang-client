@@ -8,9 +8,14 @@ import Modal from '../../shared/components/UI/Modal'
 import "./PlaceItem.css"
 import Map from '../../shared/components/UI/Map'
 import { AuthContext } from '../../shared/context/auth-context'
+import { useHttpClient } from '../../shared/hooks/http-hook'
+import ErrorModal from '../../shared/components/UI/ErrorModal'
+import LoadingSpinner from '../../shared/components/UI/LoadingSpinner'
 
 const PlaceItem = (props) => {
     const auth = useContext(AuthContext);
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient;
 
     const [showMap, setShowMap] = useState(false);
 
@@ -28,13 +33,22 @@ const PlaceItem = (props) => {
         setShowConfirmModal(false);
     }
 
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         setShowConfirmModal(false);
-        console.log('DELETING...');
+        try {
+            await sendRequest(
+                `http://localhost:5000/api/places/${props.id}`
+            );
+            props.onDelete(props.id);
+        } catch (error) {
+            
+        }
     }
 
     return (
         <>
+            <ErrorModal error={error} onClear={clearError} />
+
             <Modal
                 show={showMap}
                 onCancel={closeMap}
@@ -69,6 +83,9 @@ const PlaceItem = (props) => {
             </Modal>
 
             <li className="place-item">
+
+                {isLoading && <LoadingSpinner asOverlay />}
+                
                 <Card className="place-item__content">
                     <div className="place-item__image">
                         <img src={props.image} alt={props.title} />
