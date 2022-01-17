@@ -93,19 +93,27 @@ const Auth = () => {
         } else {
             
             try {
+                //image upload config
+                const formData = new FormData();
+                formData.append('email', formState.inputs.email.value);
+                formData.append('name', formState.inputs.name.value);
+                formData.append('password', formState.inputs.password.value);
+                formData.append('image', formState.inputs.image.value);
+
                 const data = await sendRequest(
                     "http://localhost:5000/api/users/signup",
 
                     "POST",
+                    formData
 
-                    JSON.stringify({
-                        name: formState.inputs.name.value,
-                        email: formState.inputs.email.value,
-                        password: formState.inputs.password.value,
-                    }),
-                    {
-                        "Content-Type": "application/json",
-                    }
+                    // JSON.stringify({
+                    //     name: formState.inputs.name.value,
+                    //     email: formState.inputs.email.value,
+                    //     password: formState.inputs.password.value,
+                    // }),
+                    // {
+                    //     "Content-Type": "application/json",
+                    // }
                 );
 
                 console.log(data);
