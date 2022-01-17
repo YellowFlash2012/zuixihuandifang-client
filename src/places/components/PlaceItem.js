@@ -83,12 +83,14 @@ const PlaceItem = (props) => {
             </Modal>
 
             <li className="place-item">
-
                 {isLoading && <LoadingSpinner asOverlay />}
 
                 <Card className="place-item__content">
                     <div className="place-item__image">
-                        <img src={props.image} alt={props.title} />
+                        <img
+                            src={`http://localhost:5000/${props.image}`}
+                            alt={props.title}
+                        />
                     </div>
 
                     <div className="place-item__info">
@@ -107,7 +109,7 @@ const PlaceItem = (props) => {
                         {auth.userId === props.creatorId && (
                             <>
                                 <Button to={`/places/${props.id}`}>EDIT</Button>
-                                
+
                                 <Button danger onClick={showDeleteWarning}>
                                     DELETE
                                 </Button>
