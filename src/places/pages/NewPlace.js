@@ -54,7 +54,7 @@ const NewPlace = () => {
             formData.append('title', formState.inputs.title.value);
             formData.append('description', formState.inputs.description.value);
             formData.append('address', formState.inputs.address.value);
-            formData.append('creator', auth.userId);
+            // formData.append('creator', auth.userId);
             formData.append('image', formState.inputs.image.value);
 
 
@@ -62,7 +62,7 @@ const NewPlace = () => {
                 "http://localhost:5000/api/places",
                 "POST",
                 formData,
-                {Authorization:'BEARER' + auth.token}
+                {Authorization:'BEARER ' + auth.token}
                 // JSON.stringify({
                 //     title: formState.inputs.title.value,
                 //     description: formState.inputs.description.value,
