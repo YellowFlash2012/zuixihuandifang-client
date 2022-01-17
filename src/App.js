@@ -19,6 +19,9 @@ function App() {
         (uid, token) => {
             setToken(token);
             setUserId(uid);
+
+            // persist login state 
+            localStorage.setItem("userData", JSON.stringify({ userId: uid, token: token }));
         },
         [],
     );
