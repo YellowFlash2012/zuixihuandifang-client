@@ -9,16 +9,23 @@ import Auth from "./user/pages/Auth";
 
 import Users from "./user/pages/Users";
 
+let logoutTimer;
+
 function App() {
     const [token, setToken] = useState(false);
 
     const [userId, setUserId] = useState(false);
+
+    const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
     const login = useCallback((uid, token, expirationDate) => {
         setToken(token);
         setUserId(uid);
 
         const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+
+        // autologout functionality
+        setTokenExpirationDate(tokenExpirationDate);
 
         // persist login state
         localStorage.setItem(
@@ -29,10 +36,22 @@ function App() {
 
     const logout = useCallback(() => {
         setToken(null);
+        setTokenExpirationDate(null);
         setUserId(null);
 
         localStorage.removeItem("userData");
     }, []);
+
+    // autologout
+    useEffect(() => {
+        if (token && tokenExpirationDate) {
+            const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+
+            logoutTimer = setTimeout(logout, remainingTime);
+        } else {
+            clearTimeout(logoutTimer)
+        }
+    }, [token,logout,tokenExpirationDate])
 
     // auto login the user at startup
     useEffect(() => {
