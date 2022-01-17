@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NewPlace from "./places/pages/NewPlace";
 import UpdatePlace from "./places/pages/UpdatePlace";
@@ -10,38 +10,46 @@ import Auth from "./user/pages/Auth";
 import Users from "./user/pages/Users";
 
 function App() {
-
     const [token, setToken] = useState(false);
 
     const [userId, setUserId] = useState(false);
 
-    const login = useCallback(
-        (uid, token) => {
-            setToken(token);
-            setUserId(uid);
+    const login = useCallback((uid, token) => {
+        setToken(token);
+        setUserId(uid);
 
-            // persist login state 
-            localStorage.setItem("userData", JSON.stringify({ userId: uid, token: token }));
-        },
-        [],
-    );
-    
-    const logout = useCallback(
-        () => {
-            setToken(null);
-            setUserId(null);
-        },
-        [],
-    );
+        // persist login state
+        localStorage.setItem(
+            "userData",
+            JSON.stringify({ userId: uid, token: token })
+        );
+    }, []);
+
+    const logout = useCallback(() => {
+        setToken(null);
+        setUserId(null);
+        
+        localStorage.removeItem("userData");
+    }, []);
+
+    // auto login the user at startup
+    useEffect(() => {
+        const storedData = JSON.parse(localStorage.getItem("userData"));
+
+        if (storedData && storedData.token) {
+            login(storedData.userId, storedData.token);
+        }
+    }, [login]);
 
     return (
         <div className="App">
             <AuthContext.Provider
                 value={{
-                    isLoggedIn: !!token, userId: userId,
+                    isLoggedIn: !!token,
+                    userId: userId,
                     login: login,
                     logout: logout,
-                    token:token
+                    token: token,
                 }}
             >
                 <BrowserRouter>
