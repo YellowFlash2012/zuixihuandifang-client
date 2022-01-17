@@ -37,9 +37,14 @@ const PlaceItem = (props) => {
         setShowConfirmModal(false);
         try {
             await sendRequest(
-                `http://localhost:5000/api/places/${props.id}`
+                `http://localhost:5000/api/places/${props.id}`,
+                "DELETE", null,
+                { Authorization: "BEARER" + auth.token }
             );
             props.onDelete(props.id);
+            
+            console.log(props.id);
+            // setShowConfirmModal(false);
         } catch (error) {
             
         }

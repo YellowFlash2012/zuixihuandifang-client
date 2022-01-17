@@ -85,7 +85,7 @@ const Auth = () => {
                     
                 );
 
-                auth.login(data.user.id);
+                auth.login(data.userId, data.token);
             } catch (error) {
                 console.log(error);
             }
@@ -117,7 +117,7 @@ const Auth = () => {
                 );
 
                 console.log(data);
-                auth.login(data.user.id);
+                auth.login(data.userId, data.token);
 
             } catch (err) {
                 console.log(err);

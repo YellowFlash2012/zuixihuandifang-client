@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+
 import { useParams } from 'react-router-dom';
 
 import PlaceList from '../components/PlaceList';
@@ -27,6 +28,7 @@ const UserPlaces = () => {
                 console.log(data);
                 setLoadedPlaces(data.places);
                 console.log(data.places);
+                console.log(data.places.map(place=>place.id));
             } catch (error) {
                 
             }
