@@ -22,7 +22,7 @@ const UserPlaces = () => {
         const fetchedPlaces = async () => {
             try {
                 const data = await sendRequest(
-                    `http://localhost:5000/api/places/user/${userId}`
+                    `${process.env.REACT_APP_SERVER_URL}/places/user/${userId}`
                 );
 
                 console.log(data);

@@ -42,7 +42,7 @@ const UpdatePlace = () => {
         const fetchedPlace = async () => {
             try {
                 const data = await sendRequest(
-                    `http://localhost:5000/api/places/${placeId}`
+                    `${process.env.REACT_APP_SERVER_URL}/${placeId}`
                 );
                 setLoadedPlace(data.place);
 
@@ -89,7 +89,7 @@ const UpdatePlace = () => {
 
         try {
             await sendRequest(
-                `http://localhost:5000/api/places/${placeId}`,
+                `${process.env.REACT_APP_SERVER_URL}/places/${placeId}`,
                 "PATCH",
                 JSON.stringify({
                     title: formState.inputs.title.value,

@@ -17,7 +17,7 @@ const Users = () => {
             
 
             try {
-                const data = await sendRequest("http://localhost:5000/api/users");
+                const data = await sendRequest(process.env.REACT_APP_SERVER_URL + "/users");
 
                 setLoadedUsers(data.users);
                 
